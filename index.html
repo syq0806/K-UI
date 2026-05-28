@@ -22,6 +22,7 @@
         ::-webkit-scrollbar-thumb:hover { background: rgba(107, 114, 128, 0.8); }
         input:focus, select:focus, textarea:focus { outline: none; box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.4); }
 
+        /* ================= 探针前台大盘核心样式 ================= */
         .probe-body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #f4f5f7; color: #333; margin: 0; padding: 20px; transition: all 0.3s; min-height: 100vh;}
         .probe-container { max-width: 1200px; margin: 0 auto; }
         .probe-global-stats { display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-around; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); margin-bottom: 30px; text-align: center; }
@@ -50,11 +51,13 @@
         .probe-stat-bar-full > div { height: 100%; border-radius: 3px; transition: width 0.3s; }
         .probe-stat-subtext { font-size: 11px; color: #6b7280; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
+        /* Table View */
         .probe-custom-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
         .probe-custom-table th { background: #f8fafc; padding: 14px 16px; color: #64748b; font-weight: 600; border-bottom: 1px solid #e2e8f0; white-space: nowrap; }
         .probe-custom-table td { padding: 12px 16px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
         .probe-custom-table tr:hover { background: #f8fafc; cursor: pointer;}
         
+        /* Toggle & Filter */
         .probe-view-controls { display: flex; gap: 8px; background: rgba(0,0,0,0.05); padding: 4px; border-radius: 8px; }
         .probe-toggle-btn { display: flex; align-items: center; gap: 6px; padding: 6px 14px; border: none; background: transparent; cursor: pointer; border-radius: 6px; font-size: 13px; font-weight: 600; color: #64748b; transition: all 0.2s; }
         .probe-toggle-btn.active { background: white; color: #3b82f6; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
@@ -62,9 +65,11 @@
         .probe-filter-tag { display: inline-flex; align-items: center; gap: 5px; background: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; color: #475569; box-shadow: 0 1px 3px rgba(0,0,0,0.05); cursor:pointer; border: 1px solid transparent;}
         .probe-filter-tag.active { background: #3b82f6; color: white; }
 
+        /* Map */
         #probe-map-container { width: 100%; height: 500px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); overflow: hidden; border: 1px solid #e5e7eb; background-color: #b1c2d4; background-image: linear-gradient(rgba(255,255,255,0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.2) 1px, transparent 1px); background-size: 20px 20px; z-index: 1;}
         .probe-custom-map-badge div { background-color: #10b981; color: white; border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; border: 2px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.4); }
 
+        /* Detail View */
         .probe-header-card { background: white; padding: 24px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px; }
         .probe-info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; font-size: 14px; }
         .probe-charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px; }
@@ -73,6 +78,7 @@
         .probe-chart-full { grid-column: 1 / -1; }
         .probe-chart-full canvas { max-height: 250px !important; }
 
+        /* 主题支持 */
         .theme2 { background-color: #0d1117; color: #c9d1d9; }
         .theme2 .probe-vps-card, .theme2 .probe-global-stats, .theme2 .probe-header-card, .theme2 .probe-chart-card { background: #161b22; color: #c9d1d9; box-shadow: 0 4px 6px rgba(0,0,0,0.4); border: 1px solid #30363d; }
         .theme2 .probe-vps-card:hover { border-color: #8b949e; }
@@ -124,7 +130,8 @@
         .theme5 #probe-map-container { background-color: #0d1117; border-color: #30363d; background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px); }
     </style>
 </head>
-<body>
+<body id="main-body">
+    
     <div id="app" v-cloak>
         <div v-if="!isLoggedIn || activeTab === 'probe'" class="probe-body" :class="probeSys.theme">
             
@@ -456,6 +463,7 @@
 
             <div v-if="activeTab === 'settings'" class="space-y-6">
                 <template v-if="role === 'admin'">
+                    
                     <div class="bg-white/60 backdrop-blur-xl p-8 rounded-[2.5rem] border border-white shadow-xl shadow-slate-200/40">
                         <h3 class="text-xl font-black text-slate-800 mb-6 flex items-center gap-2">⚙️ KUI 代理系统参数</h3>
                         <div class="max-w-md mb-6">
@@ -481,6 +489,8 @@
                                 </div>
                                 <div><label class="block text-xs font-bold text-slate-500 mb-1">自定义 CSS 代码</label><textarea v-model="probeSys.custom_css" rows="3" class="w-full bg-white/50 border p-2.5 rounded-xl text-sm font-mono"></textarea></div>
                                 <div><label class="block text-xs font-bold text-slate-500 mb-1">自定义背景图片 URL (清空恢复纯色)</label><input v-model="probeSys.custom_bg" class="w-full bg-white/50 border p-2.5 rounded-xl text-sm font-medium text-slate-700"></div>
+                                <div><label class="block text-xs font-bold text-slate-500 mb-1">自定义 &lt;head&gt; 注入</label><textarea v-model="probeSys.custom_head" rows="2" class="w-full bg-white/50 border p-2.5 rounded-xl text-sm font-mono"></textarea></div>
+                                <div><label class="block text-xs font-bold text-slate-500 mb-1">自定义底部 Script 注入</label><textarea v-model="probeSys.custom_script" rows="2" class="w-full bg-white/50 border p-2.5 rounded-xl text-sm font-mono"></textarea></div>
                                 <div><label class="block text-xs font-bold text-slate-500 mb-1">探针客户端上报间隔 (秒)</label><input type="number" v-model="probeSys.report_interval" class="w-full bg-white/50 border p-2.5 rounded-xl text-sm font-medium text-slate-700"></div>
                             </div>
                             <div class="space-y-4">
@@ -595,7 +605,7 @@
                 let initOsMap = {}; try { initOsMap = JSON.parse(localStorage.getItem('kui_deploy_os') || '{}'); } catch(e) {}
                 const deployOsMap = reactive(initOsMap);
 
-                const probeSys = reactive({ theme: 'theme1', is_public: 'true', site_title: 'Server Monitor Pro', custom_bg: '', custom_css: '', report_interval: '5' });
+                const probeSys = reactive({ theme: 'theme1', is_public: 'true', site_title: 'Server Monitor Pro', custom_bg: '', custom_css: '', custom_head: '', custom_script: '', report_interval: '5' });
                 const publicProbeServers = ref([]);
                 const probeView = ref(localStorage.getItem('monitor_preferred_view') || 'card');
                 const probeDetailId = ref(null); const probeDetail = ref({});
@@ -614,6 +624,24 @@
                     if (probeSys.custom_css) css += probeSys.custom_css + '\n';
                     if (probeSys.custom_bg) css += `body { background: url('${probeSys.custom_bg}') no-repeat center center fixed !important; background-size: cover !important; } .probe-vps-card, .probe-global-stats, .probe-header-card, .probe-chart-card, .probe-custom-table, .probe-filter-tag, .probe-view-controls { background: rgba(255, 255, 255, 0.4) !important; backdrop-filter: blur(12px) !important; -webkit-backdrop-filter: blur(12px) !important; border: 1px solid rgba(255, 255, 255, 0.6) !important; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1) !important; color: #111 !important; } .probe-vps-card:hover { background: rgba(255, 255, 255, 0.6) !important; transform: translateY(-3px); } .probe-group-header { color: #fff !important; text-shadow: 0 2px 5px rgba(0,0,0,0.6) !important; border-left-color: #fff !important; } .probe-g-val, .probe-card-title { color: #000 !important; font-weight: 800 !important; } .probe-g-label, .probe-g-sub, .probe-card-meta { color: #333 !important; font-weight: 600 !important; } .probe-stat-bar-full { background: rgba(0,0,0,0.1) !important; }`;
                     styleTag.innerHTML = css;
+
+                    if (probeSys.custom_head) {
+                        let headWrapper = document.getElementById('kui-custom-head');
+                        if (!headWrapper) { headWrapper = document.createElement('div'); headWrapper.id = 'kui-custom-head'; document.head.appendChild(headWrapper); }
+                        headWrapper.innerHTML = probeSys.custom_head;
+                    }
+
+                    if (probeSys.custom_script) {
+                        let scriptWrapper = document.getElementById('kui-custom-script');
+                        if (scriptWrapper) scriptWrapper.remove();
+                        const rawScript = probeSys.custom_script.replace(/<script[^>]*>/i, '').replace(/<\/script>/i, '');
+                        if (rawScript.trim()) {
+                            const newScript = document.createElement('script');
+                            newScript.id = 'kui-custom-script';
+                            newScript.text = rawScript;
+                            document.body.appendChild(newScript);
+                        }
+                    }
                 };
                 watch(() => probeSys.theme, updateCustomStyles);
                 watch(() => probeSys.custom_css, updateCustomStyles);
@@ -645,7 +673,7 @@
                     options.headers = { ...options.headers, 'Authorization': `${btoa(currentUser.value)}.${timestamp}.${signature}` };
                     const res = await fetch(url, options);
                     if (res.status === 401) { logout(); throw new Error('Unauthorized'); }
-                    if (!res.ok) { const err = await res.json(); alert(`❌ 后端报错: ${err.error || err.message}`); throw new Error('API Failed'); }
+                    if (!res.ok) throw new Error('API Failed');
                     return res;
                 };
 
@@ -841,7 +869,7 @@
                     saveProbeSettings, adminProbeServers, probeEditModalOpen, editingProbeNode, openProbeEditModal, saveProbeEdit, currentDomain
                 };
             }
-        }).mount('#app'); // 核心修复：严禁挂载到 body
+        }).mount('#app');
     </script>
 </body>
 </html>
